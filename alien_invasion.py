@@ -24,16 +24,36 @@ class AlienInvasion:
     def run_game(self):
         """Запуск основного цикла игры."""
         while True:
-            # Отсеживание событий клавиатуры и мыши.
-            for evant in pygame.event.get():
-                if evant.type == pygame.QUIT:
-                    sys.exit()
-            # при каждом проходе цикла перерисовываеться экран
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
+            self.check_events() #отслеживание нажатие клавиш и событий мыши
+            self.ship.update()
+            self._update_screen() #при каждом проходе цикла перерисовываеться экран
 
-            # Отображение последнего прорисованного экрана.
-            pygame.display.flip()
+    def check_events(self):
+        """Обрабатывает нажатие клавиш и события мыши"""
+        for evant in pygame.event.get():
+            if evant.type == pygame.QUIT:
+                sys.exit()
+            elif evant.type == pygame.KEYDOWN:
+                if evant.key == pygame.K_RIGHT:
+                    #переместить корабль вправо пока нажата клафища
+                    self.ship.moving_right = True
+                elif evant.key == pygame.K_LEFT:
+                    # переместить корабль вправо пока нажата клафища
+                    self.ship.moving_left = True
+            elif evant.type == pygame.KEYUP:
+                if evant.key == pygame.K_RIGHT:
+                    #клавища вправо - отжали, более не перемещаем корабль
+                    self.ship.moving_right = False
+                elif evant.key == pygame.K_LEFT:
+                    #клавища вправо - отжали, более не перемещаем корабль
+                    self.ship.moving_left = False
+
+    def _update_screen(self):
+        """Обновляет изображение на экране и отображает новый экран"""
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
+        # Отображение последнего прорисованного экрана.
+        pygame.display.flip()
 
 if __name__ == '__main__':
     # Создание экземпляра и запуск игры.
