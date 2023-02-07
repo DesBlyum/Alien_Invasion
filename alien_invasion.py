@@ -18,7 +18,7 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
 
-        pygame.display.set_caption("Инопланетное вторжение (охотник на пришельцев)")
+        pygame.display.set_caption("Инопланетное вторжение (Охотник на прешельцев!)")
 
         # назначение цвета фона.
         self.bg_color = (self.settings.bg_color)
@@ -49,10 +49,16 @@ class AlienInvasion:
             # переместить корабль вправо пока нажата клафища
             self.ship.moving_right = True
         elif evant.key == pygame.K_LEFT:
-            # переместить корабль вправо пока нажата клафища
+            # переместить корабль влево пока нажата клафища
             self.ship.moving_left = True
         elif evant.key == pygame.K_ESCAPE:
             sys.exit()
+        elif evant.key == pygame.K_UP:
+            # переместить корабль вверх
+            self.ship.moving_up = True
+        elif evant.key == pygame.K_DOWN:
+            # переместить корабль вниз
+            self.ship.moving_down = True
 
     def _check_keyup_evants(self, evant):
         """Реагирует на отпускание клавиш"""
@@ -60,8 +66,14 @@ class AlienInvasion:
             # клавища вправо - отжали, более не перемещаем корабль
             self.ship.moving_right = False
         elif evant.key == pygame.K_LEFT:
-            # клавища вправо - отжали, более не перемещаем корабль
+            # клавища влево - отжали, более не перемещаем корабль
             self.ship.moving_left = False
+        elif evant.key == pygame.K_UP:
+            # клавища вверх - отжали, более не перемещаем корабль
+            self.ship.moving_up = False
+        elif evant.key == pygame.K_DOWN:
+            # клавища вниз - отжали, более не перемещаем корабль
+            self.ship.moving_down = False
 
     def _update_screen(self):
         """Обновляет изображение на экране и отображает новый экран"""
