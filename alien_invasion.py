@@ -38,6 +38,7 @@ class AlienInvasion:
             self.check_events() #отслеживание нажатие клавиш и событий мыши
             self.ship.update()
             self._update_bullets() #обновление позиции снарядов и уничтожение старых снарядов
+            self._update_aliens()  # обновление позиции каждого пришельца
             self._update_screen() #при каждом проходе цикла перерисовываеться экран
 
     def check_events(self):
@@ -101,6 +102,24 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
         # print(len(self.bullets)) # проверка обнуления кол-ва снарядов на экране
 
+        # Проверка попадений в пришельцев.
+        self._check_bullet_alien_collisions()
+
+    def _check_bullet_alien_collisions(self):
+        """Обработка коллизии снарядов с пришельцами"""
+        # Удаление снарядов и пришельцев, участвующих в коллизии
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+
+        if not self.aliens:
+            # Уничтожение существующих снарядов и создание нового флота
+            self.bullets.empty()
+            self._create_fleet()
+
+    def _update_aliens(self):
+        """Проверяет достиг ли флот края экрана с последующим обновлением позиций всех пришельцев во флоте"""
+        self._check_fleet_edges()
+        self.aliens.update()
+
     def _update_screen(self):
         """Обновляет изображение на экране и отображает новый экран"""
         self.screen.fill(self.settings.bg_color)
@@ -141,6 +160,19 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
+
+    def _check_fleet_edges(self):
+        """Реагирует на достижение пришельцем края экрана."""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Опускает весь флот и меняет направление флота"""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
 if __name__ == '__main__':
     # Создание экземпляра и запуск игры.
