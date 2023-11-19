@@ -20,7 +20,7 @@ class Alien(Sprite):
 
         #Сохранение точной горизонтальной позиции пришельца
         self.x = float(self.rect.x)
-        print(self.x)
+        #print(self.x)
 
     def update(self):
         """Перемещает пришельца вправо или влево."""
