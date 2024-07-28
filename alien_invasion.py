@@ -7,6 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 
 class AlienInvasion:
@@ -25,8 +26,9 @@ class AlienInvasion:
 
         pygame.display.set_caption("Инопланетное вторжение (Охотник на прешельцев!)")
 
-        # Создание экземпляра для хранения игровой статистики.
+        # Создание экземпляра для хранения игровой статистики  и панели результатов.
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         # назначение цвета фона.
         self.bg_color = (self.settings.bg_color)
@@ -75,6 +77,7 @@ class AlienInvasion:
             # Сброс игровой статистики
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()             # сброс счета
 
             # Очистка списков пришельцев и снарядов
             self.aliens.empty()
@@ -146,6 +149,12 @@ class AlienInvasion:
         # Удаление снарядов и пришельцев, участвующих в коллизии
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.sb.prep_score()
+            self.sb.check_high_score()
+
         if not self.aliens:
             # Уничтожение существующих снарядов и создание нового флота
             self.bullets.empty()
@@ -169,6 +178,8 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        self.sb.show_score() #вывод инф. о счете
 
         # Кнопка Play отображается в том случае, если игра неактивна
         if not self.stats.game_active:
