@@ -21,8 +21,11 @@ class Settings():
         self.fleet_drop_speed = 10
         self.fleet_direction = 0.3 # +1 обозначает движение вправо; a -1 - влево
 
-        #Темп ускорения игры
+        # Темп ускорения игры
         self.speedup_scale = 1.1
+
+        # Темп роста стоимости пришельца
+        self.score_scale = 1.5
 
         self.initialize_dynamic_settings()
 
@@ -34,8 +37,14 @@ class Settings():
 
         self.fleet_direction = 1 # 1 - движение вправо, -1 влево
 
+        # подсчет очков
+        self.alien_points = 50
+
     def increase_speed(self):
         #Увеличиваем настройки скорости
         self.ship_speed_factor *=self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
         self.alien_speed_factor *= self.speedup_scale
+
+        self.alien_points = int(self.alien_points * self.score_scale)
+        #print(self.alien_points)
