@@ -1,9 +1,11 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship():
+class Ship(Sprite):
     """Класс для управления кораблем"""
     def __init__(self, ai_game):
         """Инициализирует корабль и задает его начальную позицию."""
+        super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
@@ -11,6 +13,10 @@ class Ship():
         # Загружаем изображение корабля и получает прямоугольник.
         self.image = pygame.image.load('image/aircraft_min.bmp')
         self.rect = self.image.get_rect()
+
+        # Загружаем изображение жизни корабля
+        self.image_heart = pygame.image.load('image/heart_min.bmp')
+        self.rect_heart = self.image.get_rect()
 
         # Каждый новый корабль появляется у нижнего края экрана.
         self.rect.midbottom = self.screen_rect.midbottom
@@ -43,9 +49,11 @@ class Ship():
     def blitme(self):
         """Рисует корабль в текущей позиции."""
         self.screen.blit(self.image, self.rect)
+        #self.screen.blit(self.image_heart, self.rect_heart)
 
     def center_ship(self):
         """Размещает корабль в центри нижней стороны."""
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
+
